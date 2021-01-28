@@ -1,4 +1,9 @@
-Celciuss object detection module documentation.
+.. object-detection module documentation master file, created by
+   sphinx-quickstart on Thu Jan 28 19:16:12 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to object-detection module's documentation!
 ===================================================
 
 .. toctree::

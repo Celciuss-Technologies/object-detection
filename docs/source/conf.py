@@ -17,9 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Object Detection Module'
+project = 'object-detection module'
 copyright = '2021, Edvin Molla'
 author = 'Edvin Molla'
+
+# The full version, including alpha/beta/rc tags
+release = '0.0.1'
 
 
 # -- General configuration ---------------------------------------------------
