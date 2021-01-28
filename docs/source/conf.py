@@ -22,6 +22,7 @@ copyright = '2021, Edvin Molla'
 author = 'Edvin Molla'
 
 # The full version, including alpha/beta/rc tags
+version = '1.0'
 release = '0.0.1'
 
 
@@ -47,7 +48,7 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'default'
-
+copyright = u'2014, Read the Docs'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".

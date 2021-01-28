@@ -1,9 +1,13 @@
-Celciuss object-detection module documentation.
-===================================================
+Welcome to Read the Docs Template's documentation!
+==================================================
+
+Contents:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :glob:
+
+   *
 
 
 
@@ -12,4 +16,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
