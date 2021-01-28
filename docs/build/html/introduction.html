@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>asds Zope Page Templates &#8212; object-detection module 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using Zope Page Templates" href="AdvZPT.html" />
+    <link rel="prev" title="Documentation" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="AdvZPT.html" title="Using Zope Page Templates"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">object-detection module 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">asds Zope Page Templates</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="asds-zope-page-templates">
+<h1>asds Zope Page Templates<a class="headerlink" href="#asds-zope-page-templates" title="Permalink to this headline">¶</a></h1>
+<p><em>Page Templates</em> are a web page generation tool. They help programmers
+and designers collaborate in producing dynamic web pages. Designers
+can use them to maintain pages without having to abandon their tools,
+while preserving the work required to embed those pages in an
+application.</p>
+<p>Here, you’ll learn the basic features of <em>Page Templates</em>, including
+how you can use them in your website to create dynamic web pages
+easily. In the section entitled <a class="reference internal" href="AdvZPT.html"><span class="doc">Using Zope Page Templates</span></a>, you’ll learn about
+advanced <em>Page Template</em> features.</p>
+<p>The goal of <em>Page Templates</em> is to allow designers and programmers to work
+together easily. A designer can use a WYSIWYG HTML editor to create a
+template, then a programmer can edit it to make it part of an application.
+If required, the designer can load the template <em>back</em> into his editor and
+make further changes to its structure and appearance. By taking reasonable
+steps to preserve the changes made by the programmer, the designer will not
+disrupt the application.</p>
+<p><em>Page Templates</em> aim at this goal by adopting three principles:</p>
+<ol class="arabic simple">
+<li><p>Play nicely with editing tools.</p></li>
+<li><p>What you see is very similar to what you get.</p></li>
+<li><p>Keep code out of templates, except for structural logic.</p></li>
+</ol>
+<p>A Page Template is like a model of the pages that it will generate. In
+particular, it is parseable by most HTML tools.</p>
+<div class="section" id="html-page-templates">
+<h2>HTML Page Templates<a class="headerlink" href="#html-page-templates" title="Permalink to this headline">¶</a></h2>
+<p><em>Page Templates</em> can operate in two modes: <em>HTML Mode</em> and <em>XML Mode</em>.
+Later in this section we will show you how to use the <em>XML Mode</em>, but in
+most cases we want to use the <em>HTML Mode</em> which is also the default mode.
+For the <em>HTML Mode</em> the <em>Content-Type</em> has to be set to ‘text/html’.</p>
+<p>HTML isn’t XML-conform and can’t be extended by a template language. So
+while rendered HTML <em>Page Templates</em> should return valid HTML, their
+source code isn’t valid HTML or XML. But the <em>Template Attribute
+Language</em> (<em>TAL</em>) does a good job in hiding itself in HTML tags, so most
+HTML tools will be able to parse the source of HTML <em>Page Templates</em> and
+just ignore the <em>TAL</em> attributes.</p>
+<p>As you might already know, XHTML is a XML-conform reformulation of HTML
+and widely used in our days. Nevertheless, generating HTML and XHTML
+with <em>Page Templates</em> works exactly the same way. While the <em>HTML Mode</em>
+doesn’t enforce well-formed XML, it’s absolutely fine to use this mode
+also for XHTML.</p>
+<div class="section" id="how-page-templates-work">
+<h3>How Page Templates Work<a class="headerlink" href="#how-page-templates-work" title="Permalink to this headline">¶</a></h3>
+<p><em>Page Templates</em> use the <em>Template Attribute Language</em> (<em>TAL</em>). <em>TAL</em>
+consists of special tag attributes. For example, a dynamic page
+headline might look like this:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;context/title&quot;</span><span class="p">&gt;</span>Sample Page Title<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The ‘tal:content’ attribute is a <em>TAL</em> statement. Since it has an XML
+namespace (the ‘tal:’ part) most editing tools will not complain that
+they don’t understand it, and will not remove it. It will not change
+the structure or appearance of the template when loaded into a WYSIWYG
+editor or a web browser. The name <em>content</em> indicates that it will set
+the text contained by the ‘h1’ tag, and the value ‘context/title’ is an
+expression providing the text to insert into the tag. Given the text
+specified by ‘context/title’ resolves to “Susan Jones Home Page”, the
+generated HTML snippet looks like this:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Susan Jones Home Page<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>All <em>TAL</em> statements consist of tag attributes whose name starts with
+‘tal:’ and all <em>TAL</em> statements have values associated with them. The
+value of a <em>TAL</em> statement is shown inside quotes. See <span class="xref std std-doc">tal</span> for
+more information on <em>TAL</em>.</p>
+<p>To the HTML designer using a WYSIWYG tool, the dynamic headline example
+is perfectly parseable HTML, and shows up in their editor looking like a
+headline should look like. In other words, <em>Page Templates</em> play nicely
+with editing tools.</p>
+<p>This example also demonstrates the principle that “What you see is very
+similar to what you get”. When you view the template in an editor, the
+headline text will act as a placeholder for the dynamic headline text.
+The template provides an example of how generated documents will look.</p>
+<p>When this template is saved and viewed by a user, the page template
+implementation turns the dummy content into dynamic content, replacing
+“Sample Page Title” with whatever ‘context/title’ resolves to. In this
+case, ‘context/title’ resolves to the title of the object to which the
+template is applied. This substitution is done dynamically, when the
+template is viewed.</p>
+<p>There are template statements for replacing entire tags, their contents,
+or just some of their attributes. You can repeat a tag several times or
+omit it entirely. You can join parts of several templates together, and
+specify simple error handling. All of these capabilities are used to
+generate document structures. Despite these capabilities, you <strong>can’t</strong>
+create subroutines or classes, perform complex flow control, or easily
+express complex algorithms using a <em>Page Template</em>. For these tasks,
+you should use Python-based Scripts or application components.</p>
+<p>The <em>Page Template</em> language is deliberately not as powerful and
+general-purpose as it could be. It is meant to be used inside of a
+framework (such as Zope) in which other objects handle business logic
+and tasks unrelated to page layout.</p>
+<p>For instance, template language would be useful for rendering an invoice
+page, generating one row for each line item, and inserting the
+description, quantity, price, and so on into the text for each row. It
+would not be used to create the invoice record in a database or to
+interact with a credit card processing facility.</p>
+</div>
+<div class="section" id="tales-expressions">
+<h3><em>TALES</em> Expressions<a class="headerlink" href="#tales-expressions" title="Permalink to this headline">¶</a></h3>
+<p>The expression “context/title” in your simple Page Template is a <em>path
+expression</em>. This is the most common type of expression. There are
+several other types of expressions defined by the <em>TAL Expression
+Syntax</em> (<em>TALES</em>) specification. For more information on TALES see
+<span class="xref std std-doc">tales</span>.</p>
+<div class="section" id="path-expressions">
+<h4>Path Expressions<a class="headerlink" href="#path-expressions" title="Permalink to this headline">¶</a></h4>
+<p>The ‘context/title’ <em>path expression</em> fetches the <em>title</em> attribute
+of the context. Here are some other common path expressions:</p>
+<ul class="simple">
+<li><p>‘context/objectValues’: A list of the sub-objects of the folder on
+which the template is called.</p></li>
+<li><p>‘request/URL’: The URL of the current web request.</p></li>
+<li><p>‘user/getUserName’: The authenticated user’s login name.</p></li>
+</ul>
+<p>Every <em>path expression</em> starts with a variable name. The available
+variable names refer either to objects like <em>context</em>, <em>request</em> or
+<em>user</em> that are bound to every <em>Page Template</em> by default or variables
+defined within the <em>Page Template</em> using TAL. Note that <em>here</em> is an
+old alias of <em>context</em> and still used in many places.</p>
+<p>The small set of built-in variables such as <em>request</em> and <em>user</em> is
+described in the section entitled <a class="reference internal" href="AdvZPT.html"><span class="doc">Using Zope Page Templates</span></a>. You will also learn
+how to define your own variables in that section.</p>
+<p>If the variable itself returns the value you want, you are done.
+Otherwise, you add a slash (‘/’) and the name of a sub-object or
+attribute. You may need to work your way through several
+sub-objects to get to the value you’re looking for.</p>
+</div>
+<div class="section" id="python-expressions">
+<h4>Python Expressions<a class="headerlink" href="#python-expressions" title="Permalink to this headline">¶</a></h4>
+<p>A good rule of thumb is that if you need Python to express your logic,
+you better factor out the code into a script (Python function or
+class). But page templates can be used for prototyping and sometimes
+it would be overkill to write a script for one line of code. And
+looking at existing templates you will see quite often ‘Python
+expressions’, so it’s better to know them.</p>
+<p>Recall the first example of this section:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;context/title&quot;</span><span class="p">&gt;</span>Sample Page Title<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Let’s try to rewrite it using a <em>Python expression</em>:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;python: context.title&quot;</span><span class="p">&gt;</span>Sample Page Title<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>While <em>path expressions</em> are the default, we need a prefix to indicate other
+expression types. This expression with the prefix ‘python:’ does (at least
+here) the same as the <em>path expression</em> above. <em>Path expressions</em> try different
+ways to access ‘title’, so in general they are more flexible, but less
+explicit.</p>
+<p>There are some simple things you can’t do with <em>path expressions</em>.
+The most common are comparing values like in:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>&quot;python: variable1 == variable2&quot;
+</pre></div>
+</div>
+<p>or passing arguments to methods, e.g.:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>&quot;python: context.objectValues([&#39;Folder&#39;])&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tal-attributes">
+<h3><em>TAL</em> Attributes<a class="headerlink" href="#tal-attributes" title="Permalink to this headline">¶</a></h3>
+<p><em>Page Templates</em> are example pages or snippets. <em>TAL</em> statements define
+how to convert them dynamically. Depending on the used <em>TAL</em> attribute
+they substitute example content or attributes by dynamic values, or
+remove or repeat example elements depending on dynamic values.</p>
+<p>Here’s another example:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+      This is <span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;template/title&quot;</span><span class="p">&gt;</span>the Title<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>.
+    <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="inserting-text">
+<h4>Inserting Text<a class="headerlink" href="#inserting-text" title="Permalink to this headline">¶</a></h4>
+<p>In the above template, you used the ‘tal:content’ statement on a
+<em>bold</em> tag. When you render it, the template implementation replaced
+the content of the HTML <em>bold</em> element with the title of the template.</p>
+<div class="admonition-implementation-note admonition">
+<p class="admonition-title">Implementation Note</p>
+<p>Not all implementations support titles for templates.</p>
+</div>
+<p>This is easy as long as we want to replace the complete content of an
+HTML element. But what if we want to replace only some words within
+an element?</p>
+<p>In order to place dynamic text inside of other text, you typically use
+‘tal:replace’ on an additional ‘span’ tag. For example, add the
+following lines to your example:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>The URL is
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;request/URL&quot;</span><span class="p">&gt;</span>
+    http://www.example.com<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The ‘span’ tag is structural, not visual, so this looks like “The URL
+is <a class="reference external" href="http://www.example.com">http://www.example.com</a>.” when you view the source in an editor or
+browser. When you view the rendered version, however, it may look
+something like:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>The URL is http://localhost:8080/template_test/simple_page.
+</pre></div>
+</div>
+<p>If you look at the source code of the rendered version, the <em>span</em>
+tags are removed.</p>
+<p>To see the difference between ‘tal:replace’ and ‘tal:content’, create
+a page template and include the following in the body:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;template/title&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;request/URL&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;user/getUserName&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;template/title&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;request/URL&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;user/getUserName&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>There are two other ways to add elements that are only needed for
+<em>TAL</em> attributes and that are removed again in the rendered version:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>The URL is
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;request/URL&quot;</span> <span class="na">tal:omit-tag</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">&gt;</span>
+    http://www.example.com<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>… which is more useful in other situations and will be discussed
+there and:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>The URL is
+  <span class="p">&lt;</span><span class="nt">tal:span</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;request/URL&quot;</span><span class="p">&gt;</span>
+    http://www.example.com<span class="p">&lt;/</span><span class="nt">tal:span</span><span class="p">&gt;</span>.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>While you can get really far by using HTML elements and ‘tal:replace’
+or ‘tal:omit-tag’, some people prefer to use <em>TAL</em> elements if the
+elements are only used to add <em>TAL</em> attributes. <em>TAL</em> is an attribute
+language and doesn’t define any elements like ‘tal:span’, but it uses
+a complete XML namespace and allows to use any element name you like.
+They are silently removed while the <em>Page Template</em> is rendered.</p>
+<p>This is useful for using speaking names like ‘tal:loop’, ‘tal:case’ or
+‘tal:span’ and to insert additional elements where HTML doesn’t allow
+elements like ‘span’ or ‘div’. And if her browser or editor also
+ignores these tags, the designer will have less trouble with <em>TAL</em>
+elements than with additional HTML elements.</p>
+</div>
+<div class="section" id="repeating-structures">
+<h4>Repeating Structures<a class="headerlink" href="#repeating-structures" title="Permalink to this headline">¶</a></h4>
+<p>Let’s start with a simple three-liner:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">tal:repeat</span><span class="o">=</span><span class="s">&quot;number python: range(4)&quot;</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;number&quot;</span><span class="p">&gt;</span>
+  999
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>‘number’ is our <em>repeat variable</em> and ‘range(4)’ is a <em>Python
+expression</em> that returns the list ‘[0, 1, 2, 3]’. If this code is
+rendered, the ‘repeat’ statement repeats the <em>paragraph</em> element for
+each value of the sequence, replacing the variable ‘number’ by the
+current sequence value. So the rendered page will not show the
+example number ‘999’, but 4 <em>paragraph</em> elements containing the
+numbers of our list.</p>
+<p>In most cases we want to iterate over more complex sequences. Our
+next example shows how to use a sequence of (references to) objects.
+The ‘simple_page’ template could be improved by adding an item list,
+in the form of a list of the objects that are in the same <em>Folder</em> as
+the template. You will make a table that has a row for each object,
+and columns for the id, meta-type and title. Add these lines to the
+bottom of your example template:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">table</span> <span class="na">border</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;100%&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Id<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Meta-Type<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Title<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">tr</span> <span class="na">tal:repeat</span><span class="o">=</span><span class="s">&quot;item context/objectValues&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/getId&quot;</span><span class="p">&gt;</span>Id<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/meta_type&quot;</span><span class="p">&gt;</span>Meta-Type<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/title&quot;</span><span class="p">&gt;</span>Title<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The ‘tal:repeat’ statement on the table row means “repeat this row for
+each item in my context’s list of object values”. The <em>repeat</em>
+statement puts the objects from the list into the <em>item</em> variable one
+at a time (this is called the <em>repeat variable</em>), and makes a copy of
+the row using that variable. The value of ‘item/getId’ in each row is
+the Id of the object for that row, and likewise with ‘item/meta_type’
+and ‘item/title’.</p>
+<p>You can use any name you like for the repeat variable (“item” is only
+an example), as long as it starts with a letter and contains only
+letters, numbers, and underscores (‘_’). The repeat variable is only
+defined in the repeat tag. If you try to use it above or below the
+<em>tr</em> tag you will get an error.</p>
+<p>You can also use the repeat variable name to get information about the
+current repetition. See <a class="reference internal" href="AdvZPT.html"><span class="doc">Using Zope Page Templates</span></a>.</p>
+<p>Now view the page and notice how it lists all the objects in the same
+folder as the template. Try adding or deleting objects from the
+folder and notice how the page reflects these changes.</p>
+</div>
+<div class="section" id="conditional-elements">
+<h4>Conditional Elements<a class="headerlink" href="#conditional-elements" title="Permalink to this headline">¶</a></h4>
+<p>Using Page Templates you can dynamically query your environment and
+selectively insert text depending on conditions. For example, you
+could display special information in response to a cookie:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">tal:condition</span><span class="o">=</span><span class="s">&quot;request/cookies/verbose | nothing&quot;</span><span class="p">&gt;</span>
+  Here&#39;s the extra information you requested.
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This paragraph will be included in the output only if there is a
+‘verbose’ cookie set. The expression, ‘request/cookies/verbose |
+nothing’ is true only when there is a cookie named ‘verbose’ set.
+You’ll learn more about this kind of expression in the section
+entitled <a class="reference internal" href="AdvZPT.html"><span class="doc">Using Zope Page Templates</span></a>.</p>
+<p>Using the ‘tal:condition’ statement you can check all kinds of
+conditions. A ‘tal:condition’ statement leaves the tag and its
+contents in place if its expression has a true value, but removes them
+if the value is false. Page templates consider the number zero, a  blank
+string, an empty list, and the built-in variable ‘nothing’ to be false
+values. Nearly every other value is true, including non-zero numbers,
+and strings with anything in them (even spaces!).</p>
+<div class="admonition-implementation-note admonition">
+<p class="admonition-title">Implementation Note</p>
+<p>In Python, page templates use the standard <code class="docutils literal notranslate"><span class="pre">bool</span></code> operator to
+test conditions. Python objects can override the behaviour of
+boolean tests by implementing the <code class="docutils literal notranslate"><span class="pre">__bool__</span></code> (or <code class="docutils literal notranslate"><span class="pre">__nonzero__</span></code>
+on Python 2) method.</p>
+</div>
+<p>Another common use of conditions is to test a sequence to see if it is
+empty before looping over it. For example in the last section you saw
+how to draw a table by iterating over a collection of objects. Here’s
+how to add a check to the page so that if the list of objects is empty
+no table is drawn.</p>
+<p>To allow you to see the effect, we first have to modify that example
+a bit, showing only <em>Folder</em> objects in the context folder. Because
+we can’t specify parameters using <em>path expressions</em> like
+‘context/objectValues’, we first convert it into the <em>Python
+expression</em> ‘context.objectValues()’ and then add the argument that
+tells the ‘objectValues’ method to return only sub-folders:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">tr</span> <span class="na">tal:repeat</span><span class="o">=</span><span class="s">&quot;item python: context.objectValues([&#39;Folder&#39;])&quot;</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If you did not add any sub-folders to the <em>template_test</em> folder so
+far, you will notice that using the <em>Test</em> tab the table header is
+still shown even if we have no table body. To avoid this we add a
+‘tal:condition’ statement in the table tag. The complete table now
+looks like this:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">table</span> <span class="na">tal:condition</span><span class="o">=</span><span class="s">&quot;python: context.objectValues([&#39;Folder&#39;])&quot;</span>
+       <span class="na">border</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;100%&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Id<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Meta-Type<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Title<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">tr</span> <span class="na">tal:repeat</span><span class="o">=</span><span class="s">&quot;item python: context.objectValues([&#39;Folder&#39;])&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/getId&quot;</span><span class="p">&gt;</span>Id<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/meta_type&quot;</span><span class="p">&gt;</span>Meta-Type<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;item/title&quot;</span><span class="p">&gt;</span>Title<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If the list of sub-folders is an empty list, the condition is false
+and the entire table is omitted. You can verify this by using the
+<em>Test</em> tab again.</p>
+<p>Go and add three Folders named ‘1’, ‘2’, and ‘3’ to the
+<em>template_test</em> folder in which your <em>simple_page</em> template lives.
+Revisit the <em>simple_page</em> template and view the rendered output via
+the <em>Test</em> tab. You will see a table that looks much like the below:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>Id          Meta-Type          Title
+1           Folder
+2           Folder
+3           Folder
+</pre></div>
+</div>
+</div>
+<div class="section" id="changing-attributes">
+<h4>Changing Attributes<a class="headerlink" href="#changing-attributes" title="Permalink to this headline">¶</a></h4>
+<p>Most, if not all, of the objects listed by your template have an
+<em>icon</em> attribute that contains the path to the icon for that kind of
+object. In order to show this icon in the meta-type column, you will
+need to insert this path into the ‘src’ attribute of an ‘img’ tag.
+Edit the table cell in the meta-type column of the above example to
+look like this:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;file_icon.gif&quot;</span>
+         <span class="na">tal:attributes</span><span class="o">=</span><span class="s">&quot;src item/icon&quot;</span> <span class="p">/&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;item/meta_type&quot;</span><span class="p">&gt;</span>Meta-Type<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The ‘tal:attributes’ statement replaces the ‘src’ attribute of the
+‘img’ tag with the value of ‘item/icon’. The ‘src` attribute in the
+template (whose value is “file_icon.gif”) acts as a placeholder.</p>
+<p>Notice that we’ve replaced the ‘tal:content’ attribute on the table
+cell with a ‘tal:replace’ statement on a ‘span’ tag. This change
+allows you to have both an image and text in the table cell.</p>
+</div>
+</div>
+</div>
+<div class="section" id="xml-page-templates">
+<h2>XML Page Templates<a class="headerlink" href="#xml-page-templates" title="Permalink to this headline">¶</a></h2>
+<p>Creating XML with <em>Page Templates</em> is almost exactly like creating HTML.
+You switch to <em>XML Mode</em> by setting the <em>content-type</em> field to
+‘text/xml’ or whatever the content-type for your XML should be.</p>
+<p>In <em>XML Mode</em> no “loose” markup is allowed. Page templates assumes
+that your template is well-formed XML. Page templates also requires an
+explicit TAL and METAL XML namespace declarations in order to
+emit XML. For example, if you wish to emit XHTML, you might put your
+namespace declarations on the ‘html’ tag:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span> <span class="na">xmlns:tal</span><span class="o">=</span><span class="s">&quot;http://xml.zope.org/namespaces/tal&quot;</span>
+  <span class="na">xmlns:metal</span><span class="o">=</span><span class="s">&quot;http://xml.zope.org/namespaces/metal&quot;</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>To browse the source of an XML template you go to ‘source.xml’ rather than
+‘source.html’.</p>
+<div class="section" id="debugging-and-testing">
+<h3>Debugging and Testing<a class="headerlink" href="#debugging-and-testing" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-implementation-note admonition">
+<p class="admonition-title">Implementation Note</p>
+<p>This section refers specifically to the Zope2/Zope page template
+implementation. This behaviour is basically shared by
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">zope.pagetemplate</span></code>; see
+<code class="xref py py-class docutils literal notranslate"><span class="pre">zope.pagetemplate.interfaces.IPageTemplateProgram</span></code>.</p>
+</div>
+<p>Zope helps you find and correct problems in your <em>Page Templates</em>. Zope
+notices problems at two different times: when you’re editing a <em>Page
+Template</em>, and when you’re viewing a <em>Page Template</em>. Zope catches
+different types of problems when you’re editing and than when you’re
+viewing a <em>Page Template</em>.</p>
+<p>You may have already seen the trouble-shooting comments that Zope inserts
+into your Page Templates when it runs into problems. These comments tell
+you about problems that Zope finds while you’re editing your templates.
+The sorts of problems that Zope finds when you’re editing are mostly
+errors in your <em>TAL</em> statements. For example:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Page Template Diagnostics</span>
+<span class="c"> Compilation failed</span>
+<span class="c"> TAL.TALDefs.TALError: bad TAL attribute: &#39;contents&#39;, at line 10, column 1</span>
+<span class="c">--&gt;</span>
+</pre></div>
+</div>
+<p>This diagnostic message lets you know that you mistakenly used
+‘tal:contents’ rather than ‘tal:content’ on line 10 of your template.
+Other diagnostic messages will tell you about problems with your template
+expressions and macros.</p>
+<p>When you’re using the Zope management interface to edit <em>Page Templates</em>
+it’s easy to spot these diagnostic messages, because they are shown in the
+“Errors” header of the management interface page when you save the <em>Page
+Template</em>.</p>
+<p>If you don’t notice the diagnostic message and try to render a template
+with problems you’ll see a message like this:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>Error Type: PTRuntimeError
+Error Value: Page Template hello.html has errors.
+</pre></div>
+</div>
+<p>That’s your signal to reload the template and check out the diagnostic
+message.</p>
+<p>In addition to diagnostic messages when editing, you’ll occasionally get
+regular Zope errors when viewing a Page Template. These problems are
+usually due to problems in your template expressions. For example, you
+might get an error if an expression can’t locate a variable:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>Error Type: KeyError
+Error Value: &#39;unicorn&#39;
+</pre></div>
+</div>
+<p>This error message tells you that it cannot find the <em>unicorn</em> variable.
+To help you figure out what went wrong, Zope includes information about
+the environment in the traceback. This information will be available in
+your <em>error_log</em> (in your Zope root folder). The traceback will include
+information about the place where the error occurred and the
+environment:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>URL: /sandbox/demo
+Line 1, Column 14
+Expression: standard:&#39;context/unicorn&#39;
+Names:
+  {&#39;container&#39;: &lt;Folder instance at 019AC4D0&gt;,
+   &#39;context&#39;: &lt;Application instance at 01736F78&gt;,
+   &#39;default&#39;: &lt;Products.PageTemplates.TALES.Default instance at 0x012F9D00&gt;,
+   ...
+   &#39;root&#39;: &lt;Application instance at 01736F78&gt;,
+   &#39;template&#39;: &lt;ZopePageTemplate at /sandbox/demo&gt;,
+   &#39;traverse_subpath&#39;: [],
+   &#39;user&#39;: admin}
+</pre></div>
+</div>
+<p>This information is a bit cryptic, but with a little detective work it can
+help you figure out what went wrong. In this case, it tells us that the
+‘context’ variable is an “Application instance”. This means that it is
+the top-level Zope folder (notice how ‘root’ variable is the same
+“Application instance”). Perhaps the problem is that you wanted to apply
+the template to a folder that had a <em>unicorn</em> property, but the root on
+which you called the template hasn’t such a property.</p>
+</div>
+</div>
+<div class="section" id="macros">
+<h2>Macros<a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h2>
+<p>So far, you’ve seen how <em>Page Templates</em> can be used to add dynamic
+behavior to individual web pages. Another feature of page templates is
+the ability to reuse look and feel elements across many pages.</p>
+<p>For example, with <em>Page Templates</em>, you can have a site that has a
+standard look and feel. No matter what the “content” of a page, it will
+have a standard header, side-bar, footer, and/or other page elements.
+This is a very common requirement for websites.</p>
+<p>You can reuse presentation elements across pages with <em>macros</em>. Macros
+define a section of a page that can be reused in other pages. A macro can
+be an entire page, or just a chunk of a page such as a header or footer.
+After you define one or more macros in one <em>Page Template</em>, you can use
+them in other <em>Page Templates</em>.</p>
+<div class="section" id="using-macros">
+<h3>Using Macros<a class="headerlink" href="#using-macros" title="Permalink to this headline">¶</a></h3>
+<p>You can define macros with tag attributes similar to <em>TAL</em> statements.
+Macro tag attributes are called <em>Macro Expansion Tag Attribute Language</em>
+(<em>METAL</em>) statements. Here’s an example macro definition:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;copyright&quot;</span><span class="p">&gt;</span>
+  Copyright 2009, <span class="p">&lt;</span><span class="nt">em</span><span class="p">&gt;</span>Foo, Bar, and Associates<span class="p">&lt;/</span><span class="nt">em</span><span class="p">&gt;</span> Inc.
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This ‘metal:define-macro’ statement defines a macro named “copyright”.
+The macro consists of the ‘p’ element (including all contained elements,
+ending with the closing ‘p’ tag).</p>
+<p>Macros defined in a Page Template are stored in the template’s <em>macros</em>
+attribute. You can use macros from other <em>Page Templates</em> by referring
+to them through the <em>macros</em> attribute of the <em>Page Template</em> in which
+they are defined. For example, suppose the <em>copyright</em> macro is in a
+<em>Page Template</em> called “master_page”. Here’s how to use the <em>copyright</em>
+macro from another <em>Page Template</em>:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">hr</span> <span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">b</span> <span class="na">metal:use-macro</span><span class="o">=</span><span class="s">&quot;container/master_page/macros/copyright&quot;</span><span class="p">&gt;</span>
+  Macro goes here
+<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>In this <em>Page Template</em>, the ‘b’ element will be completely replaced by
+the macro when the implementation renders the page:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">hr</span> <span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+  Copyright 2009, <span class="p">&lt;</span><span class="nt">em</span><span class="p">&gt;</span>Foo, Bar, and Associates<span class="p">&lt;/</span><span class="nt">em</span><span class="p">&gt;</span> Inc.
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If you change the macro (for example, if the copyright holder changes)
+then all <em>Page Templates</em> that use the macro will automatically reflect
+the change.</p>
+<p>Notice how the macro is identified by a <em>path expression</em> using the
+‘metal:use-macro’ statement. The ‘metal:use-macro’ statement replaces
+the statement element with the named macro.</p>
+</div>
+<div class="section" id="macro-details">
+<h3>Macro Details<a class="headerlink" href="#macro-details" title="Permalink to this headline">¶</a></h3>
+<p>The ‘metal:define-macro’ and ‘metal:use-macro’ statements are pretty
+simple. However there are a few subtleties to using them which are
+worth mentioning.</p>
+<p>A macro’s name must be unique within the Page Template in which it is
+defined. You can define more than one macro in a template, but they all
+need to have different names.</p>
+<p>Normally you’ll refer to a macro in a ‘metal:use-macro’ statement with a
+path expression. However, you can use any expression type you wish so
+long as it returns a macro. For example:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:use-macro</span><span class="o">=</span><span class="s">&quot;python:context.getMacro()&quot;</span><span class="p">&gt;</span>
+  Replaced with a dynamically determined macro,
+  which is located by the getMacro script.
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>In this case the path expression returns a macro defined dynamically by
+the ‘getMacro’ script. Using <em>Python expressions</em> to locate macros lets
+you dynamically vary which macro your template uses. An example
+of the body of a “getMacro” Script (Python) is as follows:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>return container.ptMacros.macros[&#39;amacroname&#39;]
+</pre></div>
+</div>
+<p>You can use the ‘default’ variable with the ‘metal:use-macro’
+statement:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:use-macro</span><span class="o">=</span><span class="s">&quot;default&quot;</span><span class="p">&gt;</span>
+  This content remains - no macro is used
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The result is the same as using <em>default</em> with ‘tal:content’ and
+‘tal:replace’. The “default” content in the tag doesn’t change when it
+is rendered. This can be handy if you need to conditionally use a macro
+or fall back on the default content if it doesn’t exist.</p>
+<p>If you try to use the ‘nothing’ variable with ‘metal:use-macro’ you will
+get an error, since ‘nothing’ is not a macro. If you want to use
+‘nothing’ to conditionally include a macro, you should instead enclose
+the ‘metal:use-macro’ statement with a ‘tal:condition’ statement.</p>
+<p>ZPT implementations handle macros first when rendering your templates.
+Then the implementation evaluates TAL expressions. For example,
+consider this macro:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;title&quot;</span>
+   <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;template/title&quot;</span><span class="p">&gt;</span>
+  template&#39;s title
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>When you use this macro it will insert the title of the template in
+which the macro is used, <em>not</em> the title of the template in which the
+macro is defined. In other words, when you use a macro, it’s like
+copying the text of a macro into your template and then rendering your
+template.</p>
+<p>If you check the <em>Expand macros when editing</em> option on the <em>Page
+Template</em> <em>Edit</em> view, then any macros that you use will be expanded in
+your template’s source.</p>
+</div>
+<div class="section" id="using-slots">
+<h3>Using Slots<a class="headerlink" href="#using-slots" title="Permalink to this headline">¶</a></h3>
+<p>Macros are much more useful if you can override parts of them when you
+use them. You can do this by defining <em>slots</em> in the macro that you can
+fill in when you use the template. For example, consider a side bar
+macro:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;sidebar&quot;</span><span class="p">&gt;</span>
+  Links
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/products&quot;</span><span class="p">&gt;</span>Products<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/support&quot;</span><span class="p">&gt;</span>Support<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/contact&quot;</span><span class="p">&gt;</span>Contact Us<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This macro is fine, but suppose you’d like to include some additional
+information in the sidebar on some pages. One way to accomplish this is
+with slots:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;sidebar&quot;</span><span class="p">&gt;</span>
+  Links
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/products&quot;</span><span class="p">&gt;</span>Products<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/support&quot;</span><span class="p">&gt;</span>Support<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/contact&quot;</span><span class="p">&gt;</span>Contact Us<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;additional_info&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>When you use this macro you can choose to fill the slot like so:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:use-macro</span><span class="o">=</span><span class="s">&quot;container/master.html/macros/sidebar&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">b</span> <span class="na">metal:fill-slot</span><span class="o">=</span><span class="s">&quot;additional_info&quot;</span><span class="p">&gt;</span>
+    Make sure to check out our <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/specials&quot;</span><span class="p">&gt;</span>specials<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>.
+  <span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>When you render this template the side bar will include the extra
+information that you provided in the slot:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+  Links
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/products&quot;</span><span class="p">&gt;</span>Products<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/support&quot;</span><span class="p">&gt;</span>Support<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/contact&quot;</span><span class="p">&gt;</span>Contact Us<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">b</span><span class="p">&gt;</span>
+    Make sure to check out our <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/specials&quot;</span><span class="p">&gt;</span>specials<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>.
+  <span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Notice how the ‘span’ element that defines the slot is replaced with the
+‘b’ element that fills the slot.</p>
+</div>
+<div class="section" id="customizing-default-presentation">
+<h3>Customizing Default Presentation<a class="headerlink" href="#customizing-default-presentation" title="Permalink to this headline">¶</a></h3>
+<p>A common use of slot is to provide default presentation which you can
+customize. In the slot example in the last section, the slot definition
+was just an empty ‘span’ element. However, you can provide default
+presentation in a slot definition. For example, consider this revised
+sidebar macro:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;sidebar&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;links&quot;</span><span class="p">&gt;</span>
+  Links
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/products&quot;</span><span class="p">&gt;</span>Products<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/support&quot;</span><span class="p">&gt;</span>Support<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/contact&quot;</span><span class="p">&gt;</span>Contact Us<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;additional_info&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Now the sidebar is fully customizable. You can fill the ‘links’ slot to
+redefine the sidebar links. However, if you choose not to fill the
+‘links’ slot then you’ll get the default links, which appear inside the
+slot.</p>
+<p>You can even take this technique further by defining slots inside of
+slots. This allows you to override default presentation with a fine
+degree of precision. Here’s a sidebar macro that defines slots within
+slots:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;sidebar&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;links&quot;</span><span class="p">&gt;</span>
+  Links
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="p">&gt;</span>Home<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/products&quot;</span><span class="p">&gt;</span>Products<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/support&quot;</span><span class="p">&gt;</span>Support<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/contact&quot;</span><span class="p">&gt;</span>Contact Us<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;additional_links&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;additional_info&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>If you wish to customize the sidebar links you can either fill the
+‘links’ slot to completely override the links, or you can fill the
+‘additional_links’ slot to insert some extra links after the default
+links. You can nest slots as deeply as you wish.</p>
+</div>
+<div class="section" id="combining-metal-and-tal">
+<h3>Combining METAL and TAL<a class="headerlink" href="#combining-metal-and-tal" title="Permalink to this headline">¶</a></h3>
+<p>You can use both <em>METAL</em> and <em>TAL</em> statements on the same elements. For
+example:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;links&quot;</span>
+    <span class="na">tal:repeat</span><span class="o">=</span><span class="s">&quot;link context/getLinks&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;link url&quot;</span>
+       <span class="na">tal:attributes</span><span class="o">=</span><span class="s">&quot;href link/url&quot;</span>
+       <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;link/name&quot;</span><span class="p">&gt;</span>link name<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>In this case, ‘getLinks’ is an (imaginary) Script that assembles a list
+of link objects, possibly using a Catalog query.</p>
+<p>Since METAL statements are evaluated before <em>TAL</em> statements, there are
+no conflicts. This example is also interesting since it customizes a
+macro without using slots. The macro calls the ‘getLinks’ Script to
+determine the links. You can thus customize your site’s links by
+redefining the ‘getLinks’ Script at different locations within your
+site.</p>
+<p>It’s not always easy to figure out the best way to customize look and
+feel in different parts of your site. In general you should use slots
+to override presentation elements, and you should use Scripts to provide
+content dynamically. In the case of the links example, it’s arguable
+whether links are content or presentation. Scripts probably provide a
+more flexible solution, especially if your site includes link content
+objects.</p>
+</div>
+<div class="section" id="whole-page-macros">
+<h3>Whole Page Macros<a class="headerlink" href="#whole-page-macros" title="Permalink to this headline">¶</a></h3>
+<p>Rather than using macros for chunks of presentation shared between
+pages, you can use macros to define entire pages. Slots make this
+possible. Here’s an example macro that defines an entire page:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span> <span class="na">metal:define-macro</span><span class="o">=</span><span class="s">&quot;page&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span> <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;context/title&quot;</span><span class="p">&gt;</span>The title<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;headline&quot;</span>
+        <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;context/title&quot;</span><span class="p">&gt;</span>title<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;body&quot;</span><span class="p">&gt;</span>
+      This is the body.
+    <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">metal:define-slot</span><span class="o">=</span><span class="s">&quot;footer&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Copyright 2009 Fluffy Enterprises<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This macro defines a page with three slots, ‘headline’, ‘body’, and
+‘footer’. Notice how the ‘headline’ slot includes a <em>TAL</em> statement to
+dynamically determine the headline content.</p>
+<p>You can then use this macro in templates for different types of content,
+or different parts of your site. For example here’s how a template for
+news items might use this macro:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span> <span class="na">metal:use-macro</span><span class="o">=</span><span class="s">&quot;container/master.html/macros/page&quot;</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">metal:fill-slot</span><span class="o">=</span><span class="s">&quot;headline&quot;</span><span class="p">&gt;</span>
+    Press Release:
+    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">tal:replace</span><span class="o">=</span><span class="s">&quot;context/getHeadline&quot;</span><span class="p">&gt;</span>Headline<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">metal:fill-slot</span><span class="o">=</span><span class="s">&quot;body&quot;</span>
+     <span class="na">tal:content</span><span class="o">=</span><span class="s">&quot;context/getBody&quot;</span><span class="p">&gt;</span>
+    News item body goes here
+  <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>This template redefines the ‘headline’ slot to include the words “Press
+Release” and call the ‘getHeadline’ method on the current object. It
+also redefines the ‘body’ slot to call the ‘getBody’ method on the
+current object.</p>
+<p>The powerful thing about this approach is that you can now change the
+‘page’ macro and the press release template will be automatically
+updated. For example you could put the body of the page in a table and
+add a sidebar on the left and the press release template would
+automatically use these new presentation elements.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">asds Zope Page Templates</a><ul>
+<li><a class="reference internal" href="#html-page-templates">HTML Page Templates</a><ul>
+<li><a class="reference internal" href="#how-page-templates-work">How Page Templates Work</a></li>
+<li><a class="reference internal" href="#tales-expressions"><em>TALES</em> Expressions</a><ul>
+<li><a class="reference internal" href="#path-expressions">Path Expressions</a></li>
+<li><a class="reference internal" href="#python-expressions">Python Expressions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tal-attributes"><em>TAL</em> Attributes</a><ul>
+<li><a class="reference internal" href="#inserting-text">Inserting Text</a></li>
+<li><a class="reference internal" href="#repeating-structures">Repeating Structures</a></li>
+<li><a class="reference internal" href="#conditional-elements">Conditional Elements</a></li>
+<li><a class="reference internal" href="#changing-attributes">Changing Attributes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xml-page-templates">XML Page Templates</a><ul>
+<li><a class="reference internal" href="#debugging-and-testing">Debugging and Testing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#macros">Macros</a><ul>
+<li><a class="reference internal" href="#using-macros">Using Macros</a></li>
+<li><a class="reference internal" href="#macro-details">Macro Details</a></li>
+<li><a class="reference internal" href="#using-slots">Using Slots</a></li>
+<li><a class="reference internal" href="#customizing-default-presentation">Customizing Default Presentation</a></li>
+<li><a class="reference internal" href="#combining-metal-and-tal">Combining METAL and TAL</a></li>
+<li><a class="reference internal" href="#whole-page-macros">Whole Page Macros</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="AdvZPT.html"
+                        title="next chapter">Using Zope Page Templates</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/introduction.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="AdvZPT.html" title="Using Zope Page Templates"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">object-detection module 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">asds Zope Page Templates</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Edvin Molla.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
